@@ -112,7 +112,7 @@ times   <- seq(from = 0, to = n.t*365, by = 1)  # sequence of times to be consid
 cycles  <- length(times)                        # number of cycles
 n.sim   <- 200                                  # number of simulations
 
-source(file = "CRRN_functions.R") # source simulation functions
+source(file = "COPD_functions.R") # source simulation functions
 source(file = "MCC_functions_dong_20190131.R")   # source MCC functions
 
 
