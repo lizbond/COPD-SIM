@@ -284,7 +284,8 @@ samplev <- function (probs, m) {
        EDOHC.norm.mat <- EDO.rmv.op[,1 :23]
        EDOHO.norm.mat <- EDO.rmv.op[,24:46]
        EDOMO.norm.mat <- EDO.rmv.op[,47:69]
-        
+       
+
        
 
 
