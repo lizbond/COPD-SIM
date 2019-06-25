@@ -1,4 +1,4 @@
-                                                                                      # Authors: Elizabeth Bond, Petros Pechlivanoglou                                                  #
+                                                                                      # Authors: Elizabeth Bond, Petros Pechlivanoglou  
   #########        #########      #########    #########                              # Funding Provided By: Canadian Respiratory Research Network                                      #
  ###     ###      ###     ###     ###    ###   ###    ###                             #                                                                                                 #
 ###       ###    ###       ###    ###     ###  ###     ###                            # Citations:                                                                                      #
@@ -156,7 +156,7 @@ p = Sys.time()
    for(k in 1:n.sim){    
 
        results.sim.par <- 0                                                            # Initialize storage for parallel loop
-                  inds <- split(seq_len(n.i), sort(rep_len(seq_len(Cores), n.i)))      # Slipt number of indivuals into groups for parallel loop
+                  inds <- split(seq_len(n.i), sort(rep_len(seq_len(Cores), n.i)))      # Split number of indivuals into groups for parallel loop
                   
 ## OPEN LOOP (3)                 
 ## FOR NUMBER OF INDIVIDUALS (PARALLEL)
