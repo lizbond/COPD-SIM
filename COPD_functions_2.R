@@ -130,47 +130,49 @@ samplev <- function (probs, m) {
 ########  Import Model Output   ######## 
 ########################################
 # MSM
-  MSM <- read.csv("MSM.csv", header = TRUE)
-  # MSM <- read_excel("20190104_CRRN_Models_EDOHO_noADG.xlsx", sheet="MSM")
+  MSM <- read.csv(paste0(fp, "Data/MSM.csv"), header = TRUE)
   as.data.frame(MSM)
  
 # From ED_C 
-  MNEDC <- t(read.csv("EDC.csv", header = TRUE))
-  # MNEDC <- t(read_excel("20190104_CRRN_Models_EDOHO_noADG.xlsx", sheet="MN_EDC"))
+  MNEDC <- t(read.csv(paste0(fp, "Data/EDC.csv"), header = TRUE))
   MNEDC 
  
 # From ED_O 
-  MNEDO <- t(read.csv("EDO.csv", header = TRUE))
-  # MNEDO <- t(read_excel("20190104_CRRN_Models_EDOHO_noADG.xlsx", sheet="MN_EDO"))
+  MNEDO <- t(read.csv(paste0(fp, "Data/EDO.csv"), header = TRUE))
   MNEDO 
 
 ###################################
 ### MNM ED probability function ### 
 ###################################
   
-  EDcycle  <- function(betas, X){
-              res <- exp(X%*%betas)/ (1 +sum(exp(X%*%betas)))
-              return(res)
-            }
+  EDcycle  <- function(betas1, betas2, betas3, X){
+                        exp.resp <- data.frame(Q1  = 1, 
+                                               Q2 = exp(X %*% betas1),
+                                               Q3 = exp(X %*% betas2),
+                                               Q4 = exp(X %*% betas3))
+                        
+                        res <- exp.resp/rowSums(exp.resp)
+    return(res)
+  }
 
 ################################################################################## 
 ############################# COVAR Functions ####################################  
 ##################################################################################   
 
 # read in model output CSV files (MSM and MNM)  
-  DXEDC_covar <- as.matrix(read.csv("DXEDC_covar.csv"))
-  DXEDO_covar <- as.matrix(read.csv("DXEDO_covar.csv"))
-  DXHC_covar  <- as.matrix(read.csv("DXHC_covar.csv"))
-  DXHO_covar  <- as.matrix(read.csv("DXHO_covar.csv"))
-  DXMO_covar  <- as.matrix(read.csv("DXMO_covar.csv"))
-  HCDX_covar  <- as.matrix(read.csv("HCDX_covar.csv"))
-  HCMO_covar  <- as.matrix(read.csv("HCMO_covar.csv"))
-  HODX_covar  <- as.matrix(read.csv("HODX_covar.csv"))
-  HOMO_covar  <- as.matrix(read.csv("HOMO_covar.csv"))
-  EDC_covar   <- as.matrix(read.csv("EDC_covar.csv"))
-  EDO_covar   <- as.matrix(read.csv("EDO_covar.csv"))
+  DXEDC_covar <- as.matrix(read.csv(paste0(fp, "Data/DXEDC_covar.csv")))
+  DXEDO_covar <- as.matrix(read.csv(paste0(fp, "Data/DXEDO_covar.csv")))
+  DXHC_covar  <- as.matrix(read.csv(paste0(fp, "Data/DXHC_covar.csv")))
+  DXHO_covar  <- as.matrix(read.csv(paste0(fp, "Data/DXHO_covar.csv")))
+  DXMO_covar  <- as.matrix(read.csv(paste0(fp, "Data/DXMO_covar.csv")))
+  HCDX_covar  <- as.matrix(read.csv(paste0(fp, "Data/HCDX_covar.csv")))
+  HCMO_covar  <- as.matrix(read.csv(paste0(fp, "Data/HCMO_covar.csv")))
+  HODX_covar  <- as.matrix(read.csv(paste0(fp, "Data/HODX_covar.csv")))
+  HOMO_covar  <- as.matrix(read.csv(paste0(fp, "Data/HOMO_covar.csv")))
+  EDC_covar   <- as.matrix(read.csv(paste0(fp, "Data/EDC_covar.csv")))
+  EDO_covar   <- as.matrix(read.csv(paste0(fp, "Data/EDO_covar.csv")))
   
-  MSM_csv <- read.csv("MSM.csv")
+  MSM_csv <- read.csv(paste0(fp, "Data/MSM.csv"))
       DXEDC_mean  <- t(MSM_csv[,2])
       DXEDO_mean  <- t(MSM_csv[,3])
       DXHC_mean   <- t(MSM_csv[,4])
@@ -180,7 +182,7 @@ samplev <- function (probs, m) {
       HCMO_mean   <- t(MSM_csv[,8])
       HODX_mean   <- t(MSM_csv[,9])
       HOMO_mean   <- t(MSM_csv[,10])
-  MNM_csv <- read.csv("MNM.csv")
+  MNM_csv <- read.csv(paste0(fp, "Data/MNM.csv"))
       EDC_mean  <- t(MNM_csv[,1])
       EDO_mean  <- t(MNM_csv[,2])
       
@@ -214,15 +216,15 @@ samplev <- function (probs, m) {
                        
     # Run mvrnorm for multistate models
       # Transform MSM output
-        DXEDC.op.par <- as.numeric(trans.NB(par1 = MSM_csv[1,2],  par2 = MSM_csv[2,2],  B = as.matrix(MSM_csv[3:24,2])))    # DX to EDC
-        DXEDO.op.par <- as.numeric(trans.NB(par1 = MSM_csv[1,3],  par2 = MSM_csv[2,3],  B = as.matrix(MSM_csv[3:24,3])))    # DX to EDO
-        DXHC.op.par  <- as.numeric(lnorm.NB(par1 = MSM_csv[1,4],  par2 = MSM_csv[2,4],  B = as.matrix(MSM_csv[3:24,4])))    # DX to HC
-        DXHO.op.par  <- as.numeric(trans.NB(par1 = MSM_csv[1,5],  par2 = MSM_csv[2,5],  B = as.matrix(MSM_csv[3:24,5])))    # DX to HO
-        DXMO.op.par  <- as.numeric(lnorm.NB(par1 = MSM_csv[1,6],  par2 = MSM_csv[2,6],  B = as.matrix(MSM_csv[3:24,6])))    # DX to MO
-        HCDX.op.par  <- as.numeric(trans.NB(par1 = MSM_csv[1,7],  par2 = MSM_csv[2,7],  B = as.matrix(MSM_csv[3:24,7])))    # HC to DX
-        HCMO.op.par  <- as.numeric(trans.NB(par1 = MSM_csv[1,8],  par2 = MSM_csv[2,8],  B = as.matrix(MSM_csv[3:24,8])))    # HC to MO
-        HODX.op.par  <- as.numeric(trans.NB(par1 = MSM_csv[1,9],  par2 = MSM_csv[2,9],  B = as.matrix(MSM_csv[3:24,9])))    # HO to DX
-        HOMO.op.par  <- as.numeric(trans.NB(par1 = MSM_csv[1,10], par2 = MSM_csv[2,10], B = as.matrix(MSM_csv[3:24,10])))   # HO to MO
+        DXEDC.op.par <- as.numeric(trans.NB(par1 = MSM_csv[1,2],  par2 = MSM_csv[2,2],  B = as.matrix(MSM_csv[3:nrow(MSM_csv),2])))    # DX to EDC
+        DXEDO.op.par <- as.numeric(trans.NB(par1 = MSM_csv[1,3],  par2 = MSM_csv[2,3],  B = as.matrix(MSM_csv[3:nrow(MSM_csv),3])))    # DX to EDO
+        DXHC.op.par  <- as.numeric(lnorm.NB(par1 = MSM_csv[1,4],  par2 = MSM_csv[2,4],  B = as.matrix(MSM_csv[3:nrow(MSM_csv),4])))    # DX to HC
+        DXHO.op.par  <- as.numeric(trans.NB(par1 = MSM_csv[1,5],  par2 = MSM_csv[2,5],  B = as.matrix(MSM_csv[3:nrow(MSM_csv),5])))    # DX to HO
+        DXMO.op.par  <- as.numeric(lnorm.NB(par1 = MSM_csv[1,6],  par2 = MSM_csv[2,6],  B = as.matrix(MSM_csv[3:nrow(MSM_csv),6])))    # DX to MO
+        HCDX.op.par  <- as.numeric(trans.NB(par1 = MSM_csv[1,7],  par2 = MSM_csv[2,7],  B = as.matrix(MSM_csv[3:nrow(MSM_csv),7])))    # HC to DX
+        HCMO.op.par  <- as.numeric(trans.NB(par1 = MSM_csv[1,8],  par2 = MSM_csv[2,8],  B = as.matrix(MSM_csv[3:nrow(MSM_csv),8])))    # HC to MO
+        HODX.op.par  <- as.numeric(trans.NB(par1 = MSM_csv[1,9],  par2 = MSM_csv[2,9],  B = as.matrix(MSM_csv[3:nrow(MSM_csv),9])))    # HO to DX
+        HOMO.op.par  <- as.numeric(trans.NB(par1 = MSM_csv[1,10], par2 = MSM_csv[2,10], B = as.matrix(MSM_csv[3:nrow(MSM_csv),10])))   # HO to MO
       # Run MSM in rmvnorm
         DXEDC.rmv.op <- mvtnorm::rmvnorm(n.sim, DXEDC.op.par, DXEDC_covar)
         DXEDO.rmv.op <- mvtnorm::rmvnorm(n.sim, DXEDO.op.par, DXEDO_covar)
@@ -277,13 +279,15 @@ samplev <- function (probs, m) {
    HOMO.norm.mat  <- nb.op   (sim.op = HOMO.rmv.op,  nb = HOMO.norm.mat,  n.sim)
  # MNM rmvnorm output
    EDC.norm.mat   <- EDC.rmv.op
-       EDCHC.norm.mat <- EDC.rmv.op[,1 :23]
-       EDCHO.norm.mat <- EDC.rmv.op[,24:46]
-       EDCMO.norm.mat <- EDC.rmv.op[,47:69]
+   EDC.dim <- ncol(EDC.norm.mat) / 3
+       EDCHC.norm.mat <- EDC.rmv.op[,1                :  EDC.dim]
+       EDCHO.norm.mat <- EDC.rmv.op[,(EDC.dim + 1)    : (EDC.dim * 2)]
+       EDCMO.norm.mat <- EDC.rmv.op[,(EDC.dim * 2 + 1): ncol(EDC.norm.mat)]
    EDO.norm.mat   <- EDO.rmv.op
-       EDOHC.norm.mat <- EDO.rmv.op[,1 :23]
-       EDOHO.norm.mat <- EDO.rmv.op[,24:46]
-       EDOMO.norm.mat <- EDO.rmv.op[,47:69]
+   EDO.dim <- ncol(EDO.norm.mat) / 3
+       EDOHC.norm.mat <- EDO.rmv.op[,1                :  EDO.dim]
+       EDOHO.norm.mat <- EDO.rmv.op[,(EDO.dim + 1)    : (EDO.dim * 2)]
+       EDOMO.norm.mat <- EDO.rmv.op[,(EDO.dim * 2 + 1): ncol(EDO.norm.mat)]
        
 
        
