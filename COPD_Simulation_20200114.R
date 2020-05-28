@@ -1,11 +1,15 @@
-# Authors: Elizabeth Bond, Petros Pechlivanoglou                                                  #
-# Funding Provided By: Canadian Respiratory Research Network                                      #
-# Citations:                                                                                      #
-# -Jalal H, et al. An Overview of R in Health Decision Sciences.                                  # 
-# Med. Decis. Making. 2017; 37(3): 735-746.                                                       #
-# -Krijkamp EM, et al. Microsimulation modeling for health decision sciences using R: a tutorial. #    
-# Med. Decis. Making. 2018; (in press).                                                           #
-###################################################################################################
+#                                                                                                   #
+#  AUTHORS: Elizabeth Bond, Petros Pechlivanoglou                                                   #
+#                                                                                                   #
+#  FUNDING Provided By: Canadian Respiratory Research Network                                       #
+#                                                                                                   #
+#  CITATIONS:                                                                                       #
+#  -Jalal H, et al. An Overview of R in Health Decision Sciences.                                   # 
+#   Med. Decis. Making. 2017; 37(3): 735-746.                                                       #
+#  -Krijkamp EM, et al. Microsimulation modeling for health decision sciences using R: a tutorial.  #    
+#   Med. Decis. Making. 2018; (in press).                                                           #
+#                                                                                                   #
+#####################################################################################################
 ####                                                                               ####
 ####  COPD SIMULATION  (Parallel)                                                  ####
 ####                                                                               ####
